@@ -16,6 +16,7 @@ public class Employees {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(name = "employee_id")
     private Integer employeeId;
 
 
@@ -51,8 +52,9 @@ public class Employees {
     private BigDecimal commissionPct;
 
     @JsonIgnore
-    @Column(name = "manager_id")
-    private Integer managerId;
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Employees managerId;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
