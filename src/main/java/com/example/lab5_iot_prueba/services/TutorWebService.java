@@ -45,6 +45,28 @@ public class TutorWebService {
         return ResponseEntity.badRequest().body(responseJson);
     }
 
+    @GetMapping("/trabajadores/{trabajador_id}")
+    public ResponseEntity<HashMap<String, Object>> obtenerTrabajorPorId(@PathVariable("trabajador_id") String trabajador_id_str) {
+        HashMap<String,Object> responseJson = new HashMap<>();
+        try {
+
+            Optional<Employees> optionalEmployees = employeesRepository.findById(Integer.parseInt(trabajador_id_str));
+            if (optionalEmployees.isPresent()){
+                responseJson.put("result","success");
+                Employees employees = optionalEmployees.get();
+                responseJson.put("employee",employees);
+                return ResponseEntity.ok(responseJson);
+            } else {
+                responseJson.put("msg","Trabajador no existente");
+            }
+        } catch (NumberFormatException e) {
+            responseJson.put("mgs", "el id debe ser un numero entero positivo");
+
+        }
+        responseJson.put("result","failure");
+        return ResponseEntity.badRequest().body(responseJson);
+    }
+
 
 
 }
