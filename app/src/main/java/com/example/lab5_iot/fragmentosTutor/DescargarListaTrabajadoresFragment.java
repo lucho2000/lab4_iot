@@ -91,58 +91,58 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
         for (int i = 0; i < employees.size(); i++) {
             HashMap<String, Object> data = new HashMap<>();
 
-            data.put("id", employees.get(i).getEmployeeId().toString());
+            data.put("employeeId", employees.get(i).getEmployeeId().toString());
             String firstName = employees.get(i).getFirstName();
 
             if (firstName != null || !firstName.equals(""))
-                data.put("nombre", employees.get(i).getEmployeeId().toString());
+                data.put("firstName", employees.get(i).getEmployeeId().toString());
             else
-                data.put("nombre", "sin nombre");
+                data.put("firstName", "sin nombre");
 
-            data.put("apellido", employees.get(i).getLastName());
-            data.put("correo", employees.get(i).getEmail());
+            data.put("lastName", employees.get(i).getLastName());
+            data.put("email", employees.get(i).getEmail());
 
             if (employees.get(i).getPhoneNumber() != null || employees.get(i).getPhoneNumber().equals(""))
-                data.put("celular", employees.get(i).getPhoneNumber().toString());
+                data.put("phoneNumber", employees.get(i).getPhoneNumber().toString());
             else
-                data.put("celular", "no tiene");
+                data.put("phoneNumber", "no tiene");
 
-            data.put("Job Title", employees.get(i).getJobId().getJobTitle().toString());
+            data.put("jobTitle", employees.get(i).getJobId().getJobTitle().toString());
 
             //salario
             if (employees.get(i).getSalary()!= null)
-                data.put("Salario", String.valueOf(employees.get(i).getSalary()));
+                data.put("salary", String.valueOf(employees.get(i).getSalary()));
             else
-                data.put("Salario", "no tiene");
+                data.put("salary", "no tiene");
 
 
             if (employees.get(i).getDepartmentId() == null) {
-                data.put("Departamento", "no tiene");
-                data.put("Pais", "no tiene");
-                data.put("Region", "no tiene");
+                data.put("departmentName", "no tiene");
+                data.put("countryName", "no tiene");
+                data.put("region", "no tiene");
             } else {
-                data.put("Departamento", employees.get(i).getDepartmentId().getDepartmentName());
+                data.put("departmentName", employees.get(i).getDepartmentId().getDepartmentName());
 
                 if (employees.get(i).getDepartmentId().getLocationId() == null) {
-                    data.put("pais", "no tiene");
-                    data.put("region", "no tiene");
+                    data.put("countryName", "no tiene");
+                    data.put("regionName", "no tiene");
                 } else {
 
                     if (employees.get(i).getDepartmentId().getLocationId().getCountryId() == null) {
-                        data.put("pais", "no tiene");
-                        data.put("region", "no tiene");
+                        data.put("countryName", "no tiene");
+                        data.put("regionName", "no tiene");
                     } else {
-                        data.put("pais", employees.get(i).getDepartmentId().getLocationId().getCountryId().getCountryName());
+                        data.put("countryName", employees.get(i).getDepartmentId().getLocationId().getCountryId().getCountryName());
 
                         if (employees.get(i).getDepartmentId().getLocationId().getCountryId().getRegionsId() == null) {
-                            data.put("region", "no tiene");
+                            data.put("regionName", "no tiene");
                         } else {
-                            data.put("Region", employees.get(i).getDepartmentId().getLocationId().getCountryId().getRegionsId().getRegionName());
+                            data.put("regionName", employees.get(i).getDepartmentId().getLocationId().getCountryId().getRegionsId().getRegionName());
                         }
                     }
                 }
             }
-            diccionario.put("Trabajador" + String.valueOf(i), data);
+            diccionario.put("employee" + String.valueOf(i), data);
         }
         return diccionario;
     }
