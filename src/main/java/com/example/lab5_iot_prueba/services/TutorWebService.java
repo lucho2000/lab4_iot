@@ -77,17 +77,20 @@ public class TutorWebService {
                 if (optionalTrabajdorEmployees.isPresent()) {
                     Employees trabajador = optionalTrabajdorEmployees.get();
                     //List<Employees> listaEmployeesPorTutor = employeesRepository.obtenerListaTrabajadoresPorTutorId(tutor_id_str);
-                    Integer trabajadorManagerId = trabajador.getManagerId().getEmployeeId() ;
-                    Integer tutorId = tutor.getEmployeeId();
-                    if (Objects.equals(trabajadorManagerId, tutorId)) {
+                    Employees trabajadorManager = trabajador.getManagerId();
 
-                        if (trabajador.isMeeting()) {
-                            //tiene cita
-                            responseJson.put("msg","cita_already_exist");
-                        } else {
-                            //no tiene cita
+                    if (trabajadorManager != null  ) {
+                        Integer trabajadorManagerId = trabajador.getManagerId().getEmployeeId() ;
+                        Integer tutorId = tutor.getEmployeeId();
+                        if (Objects.equals(trabajadorManagerId, tutorId)) {
 
-                            employeesRepository.updateMeeting(meeting_date,trabajador_id_str);
+                            if (trabajador.isMeeting()) {
+                                //tiene cita
+                                responseJson.put("msg","cita_already_exist");
+                            } else {
+                                //no tiene cita
+
+                                employeesRepository.updateMeeting(meeting_date,trabajador_id_str);
                             /*
                             trabajador.setMeeting(true);
 
@@ -113,14 +116,19 @@ public class TutorWebService {
                                 trabajador.setJobId(trabajadorEnviado.getJobId());
                             */
 
-                            responseJson.put("result","success");
-                            responseJson.put("msg","meeting created with employeeId: " + trabajador.getEmployeeId());
-                            return ResponseEntity.ok(responseJson);
-                        }
+                                responseJson.put("result","success");
+                                responseJson.put("msg","meeting created with employeeId: " + trabajador.getEmployeeId());
+                                return ResponseEntity.ok(responseJson);
+                            }
 
+                        } else {
+                            responseJson.put("msg","match_error");
+                        }
                     } else {
-                        responseJson.put("msg","match_error");
+                        responseJson.put("msg","trabajador no tiene manager/tutor");
                     }
+
+
                 } else {
                     responseJson.put("msg","no_employee");
                 }
