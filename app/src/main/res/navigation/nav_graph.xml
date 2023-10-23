@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/principalFragment">
+
+    <fragment
+        android:id="@+id/principalFragment"
+        android:name="com.example.lab5_iot.PrincipalFragment"
+        android:label="fragment_principal"
+        tools:layout="@layout/fragment_principal" >
+        <action
+            android:id="@+id/action_principalFragment_to_tutorFragment"
+            app:destination="@id/tutorFragment" />
+        <action
+            android:id="@+id/action_principalFragment_to_trabajadorFragment"
+            app:destination="@id/trabajadorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tutorFragment"
+        android:name="com.example.lab5_iot.fragmentosTutor.TutorFragment"
+        android:label="fragment_tutor"
+        tools:layout="@layout/fragment_tutor" >
+        <action
+            android:id="@+id/action_tutorFragment_to_buscarTrabajadorFragment"
+            app:destination="@id/buscarTrabajadorFragment" />
+        <action
+            android:id="@+id/action_tutorFragment_to_descargarListaTrabajadoresFragment2"
+            app:destination="@id/descargarListaTrabajadoresFragment2" />
+        <action
+            android:id="@+id/action_tutorFragment_to_asignarTutoriaFragment"
+            app:destination="@id/asignarTutoriaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/buscarTrabajadorFragment"
+        android:name="com.example.lab5_iot.fragmentosTutor.BuscarTrabajadorFragment"
+        android:label="fragment_buscar_trabajador"
+        tools:layout="@layout/fragment_buscar_trabajador" />
+    <fragment
+        android:id="@+id/descargarListaTrabajadoresFragment2"
+        android:name="com.example.lab5_iot.fragmentosTutor.DescargarListaTrabajadoresFragment"
+        android:label="fragment_descargar_lista_trabajadores"
+        tools:layout="@layout/fragment_descargar_lista_trabajadores" />
+    <fragment
+        android:id="@+id/trabajadorFragment"
+        android:name="com.example.lab5_iot.TrabajadorFragment"
+        android:label="fragment_trabajador"
+        tools:layout="@layout/fragment_trabajador" />
+    <fragment
+        android:id="@+id/asignarTutoriaFragment"
+        android:name="com.example.lab5_iot.fragmentosTutor.AsignarTutoriaFragment"
+        android:label="fragment_asignar_tutoria"
+        tools:layout="@layout/fragment_asignar_tutoria" />
+</navigation>

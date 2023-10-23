@@ -18,6 +18,8 @@ public class Employee {
     private Integer meeting;
     private String meetingDate;
 
+    private String employeeFeedback;
+
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -120,5 +122,13 @@ public class Employee {
 
     public void setMeetingDate(String meetingDate) {
         this.meetingDate = meetingDate;
+    }
+
+    public String getEmployeeFeedback() {
+        return employeeFeedback;
+    }
+
+    public void setEmployeeFeedback(String employeeFeedback) {
+        this.employeeFeedback = employeeFeedback;
     }
 }
