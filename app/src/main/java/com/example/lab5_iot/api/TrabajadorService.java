@@ -1,5 +1,6 @@
 package com.example.lab5_iot.api;
 
+import com.example.lab5_iot.dtos.EmployeeFeedback;
 import com.example.lab5_iot.dtos.ListaTrabajadoresDto;
 import com.example.lab5_iot.dtos.RespuestaAsignarTutoriaDto;
 import com.example.lab5_iot.dtos.TrabajadorDto;
@@ -23,5 +24,8 @@ public interface TrabajadorService {
     //  /{tutor_id}/trabajador/{trabajador_id}
     @PUT("/{tutor_id}/trabajador/{trabajador_id}")
     Call<RespuestaAsignarTutoriaDto> asignarTutoria(@Path("trabajador_id") String idTrabajador, @Path("tutor_id") String idTutor);
+
+    @PUT("/{trabajador_id}/feedback")
+    Call<EmployeeFeedback> enviarFeedback(@Path("trabajador_id") String idTrabajador, @Query("meeting_feedback") String feedback);
 
 }

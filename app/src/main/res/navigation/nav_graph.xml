@@ -46,10 +46,19 @@
         android:id="@+id/trabajadorFragment"
         android:name="com.example.lab5_iot.TrabajadorFragment"
         android:label="fragment_trabajador"
-        tools:layout="@layout/fragment_trabajador" />
+        tools:layout="@layout/fragment_trabajador" >
+        <action
+            android:id="@+id/action_trabajadorFragment_to_descargarHorariosFragment"
+            app:destination="@id/descargarHorariosFragment" />
+    </fragment>
     <fragment
         android:id="@+id/asignarTutoriaFragment"
         android:name="com.example.lab5_iot.fragmentosTutor.AsignarTutoriaFragment"
         android:label="fragment_asignar_tutoria"
         tools:layout="@layout/fragment_asignar_tutoria" />
+    <fragment
+        android:id="@+id/descargarHorariosFragment"
+        android:name="com.example.lab5_iot.DescargarHorariosFragment"
+        android:label="fragment_descargar_horarios"
+        tools:layout="@layout/fragment_descargar_horarios" />
 </navigation>

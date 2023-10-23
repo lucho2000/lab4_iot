@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.lab5_iot.R;
 import com.example.lab5_iot.api.TrabajadorService;
@@ -42,27 +43,35 @@ public class AsignarTutoriaFragment extends Fragment {
         idTutor = binding.textCodigoTutor.getText().toString();
         idTrabajador = binding.textCodigoTrabaja.getText().toString();
 
-        if ((!idTutor.equals("")) && (!idTrabajador.equals(""))){
 
-            trabajadorService.asignarTutoria(idTrabajador, idTutor).enqueue(new Callback<RespuestaAsignarTutoriaDto>() {
-                @Override
-                public void onResponse(Call<RespuestaAsignarTutoriaDto> call, Response<RespuestaAsignarTutoriaDto> response) {
-                    if (response.isSuccessful()){
-                        RespuestaAsignarTutoriaDto respuesta = response.body();
+        binding.buttonAsignar.setOnClickListener(view -> {
 
-                    }else {
+            //metodo para asignar
+            if (!idTutor.isEmpty() && !idTrabajador.isEmpty()){
+                trabajadorService.asignarTutoria(idTrabajador, idTutor).enqueue(new Callback<RespuestaAsignarTutoriaDto>() {
+                    @Override
+                    public void onResponse(Call<RespuestaAsignarTutoriaDto> call, Response<RespuestaAsignarTutoriaDto> response) {
+                        if (response.isSuccessful()) {
 
+                            RespuestaAsignarTutoriaDto respuesta = response.body();
+
+                            if (respuesta.getEstado().equals("success")) {
+                                Toast.makeText(getActivity(), "Tutoria creada exitosamente", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<RespuestaAsignarTutoriaDto> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<RespuestaAsignarTutoriaDto> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
 
 
-        }
+            }
+        });
+
+
 
 
 

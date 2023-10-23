@@ -27,7 +27,7 @@ public class TutorFragment extends Fragment {
 
     FragmentTutorBinding binding;
 
-    String canal1 = "canaHighPriority";
+    String canal1 = "canalHighPriority";
 
    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
