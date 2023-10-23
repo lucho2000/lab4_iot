@@ -62,7 +62,7 @@ public class Employees {
 
 
     @Column(name = "meeting")
-    private Integer meeting;
+    private boolean meeting;
 
 
     @Column(name = "meeting_date")

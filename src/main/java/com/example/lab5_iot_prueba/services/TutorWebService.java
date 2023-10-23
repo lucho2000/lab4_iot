@@ -5,10 +5,7 @@ import com.example.lab5_iot_prueba.entitys.Employees;
 import com.example.lab5_iot_prueba.repositories.EmployeesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +63,81 @@ public class TutorWebService {
         responseJson.put("result","failure");
         return ResponseEntity.badRequest().body(responseJson);
     }
+
+    @PutMapping(value = "/{tutor_id}/trabajador/{trabajador_id}")
+    public ResponseEntity<HashMap<String, Object>> agendarMeetingTrabajador(@PathVariable("trabajador_id") String trabajador_id_str, @PathVariable("tutor_id") String tutor_id_str, @RequestParam("meeting_date") String meeting_date) {
+
+        HashMap<String, Object> responseJson = new HashMap<>();
+        //boolean meeting = false;
+        try {
+            Optional<Employees> optionalTutorEmployees = employeesRepository.findById(Integer.parseInt(tutor_id_str));
+            Optional<Employees> optionalTrabajdorEmployees = employeesRepository.findById(Integer.parseInt(trabajador_id_str));
+            if (optionalTutorEmployees.isPresent()){
+                Employees tutor = optionalTutorEmployees.get();
+                if (optionalTrabajdorEmployees.isPresent()) {
+                    Employees trabajador = optionalTrabajdorEmployees.get();
+                    //List<Employees> listaEmployeesPorTutor = employeesRepository.obtenerListaTrabajadoresPorTutorId(tutor_id_str);
+                    Integer trabajadorManagerId = trabajador.getManagerId().getEmployeeId() ;
+                    Integer tutorId = tutor.getEmployeeId();
+                    if (Objects.equals(trabajadorManagerId, tutorId)) {
+
+                        if (trabajador.isMeeting()) {
+                            //tiene cita
+                            responseJson.put("msg","cita_already_exist");
+                        } else {
+                            //no tiene cita
+
+                            employeesRepository.updateMeeting(meeting_date,trabajador_id_str);
+                            /*
+                            trabajador.setMeeting(true);
+
+                            if (trabajadorEnviado.getMeetingDate() != null) {
+
+                            }
+                                trabajador.setEmail(trabajadorEnviado.getEmail());
+
+                            if (trabajadorEnviado.getFirstName() != null)
+                                trabajador.setFirstName(trabajadorEnviado.getFirstName());
+
+                            if (trabajadorEnviado.getLastName() != null)
+                                trabajador.setLastName(trabajadorEnviado.getLastName());
+
+
+                            if (trabajadorEnviado.getPhoneNumber() != null)
+                                trabajador.setPhoneNumber(trabajadorEnviado.getPhoneNumber());
+
+                            if (trabajadorEnviado.getHireDate() != null)
+                                trabajador.setHireDate(trabajadorEnviado.getHireDate());
+
+                            if (trabajadorEnviado.getJobId() != null)
+                                trabajador.setJobId(trabajadorEnviado.getJobId());
+                            */
+
+                            responseJson.put("result","success");
+                            responseJson.put("msg","meeting created with employeeId: " + trabajador.getEmployeeId());
+                            return ResponseEntity.ok(responseJson);
+                        }
+
+                    } else {
+                        responseJson.put("msg","match_error");
+                    }
+                } else {
+                    responseJson.put("msg","no_employee");
+                }
+
+            } else {
+                responseJson.put("msg","no_tutor");
+            }
+        } catch (NumberFormatException e) {
+            responseJson.put("mgs", "id_error");
+
+        }
+        responseJson.put("result","failure");
+        return ResponseEntity.badRequest().body(responseJson);
+
+
+    }
+
 
 
 
