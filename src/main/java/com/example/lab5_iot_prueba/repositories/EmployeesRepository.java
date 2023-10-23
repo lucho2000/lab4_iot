@@ -18,4 +18,9 @@ public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
     @Modifying
     @Query(nativeQuery = true,value = "UPDATE employees e SET e.meeting=1, e.meeting_date=?1 where e.employee_id = ?2")
     void updateMeeting(String meeting_date, String employee_id );
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE employees e SET e.employee_feedback=?1 where e.employee_id = ?2")
+    void updateMeetingFeedback(String meeting_feedback, String employee_id );
 }
