@@ -27,11 +27,12 @@
             tools:layout_editor_absoluteY="89dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <Button
         android:id="@+id/buttonDescargar"
         android:layout_width="175dp"
         android:layout_height="74dp"
-        android:layout_marginBottom="428dp"
+        android:layout_marginBottom="56dp"
         android:backgroundTint="@color/black"
         android:fontFamily="sans-serif-black"
         android:text="Descargar Horarios"
@@ -42,8 +43,62 @@
         android:textDirection="firstStrongLtr"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonFeedback"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonFeedback"
+        android:layout_width="158dp"
+        android:layout_height="74dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/black"
+        android:fontFamily="sans-serif-black"
+        android:text="Feedback"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#54CDC2"
+        android:textDirection="firstStrongLtr"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/autoCompleteTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonEnviarFeedback"
+        android:layout_width="158dp"
+        android:layout_height="74dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/black"
+        android:fontFamily="sans-serif-black"
+        android:text="Feedback"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#54CDC2"
+        android:textDirection="firstStrongLtr"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="255dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="16dp"
+        android:text="Comentario tutoria"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEnviarFeedback"
+        app:layout_constraintEnd_toEndOf="@+id/buttonFeedback"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/buttonFeedback" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

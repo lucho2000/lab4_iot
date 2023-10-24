@@ -28,25 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/buttonFeedback"
-        android:layout_width="158dp"
-        android:layout_height="74dp"
-        android:layout_marginBottom="36dp"
-        android:backgroundTint="@color/black"
-        android:fontFamily="sans-serif-black"
-        android:text="Feedback"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#54CDC2"
-        android:textDirection="firstStrongLtr"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDescargarHorarios"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

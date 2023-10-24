@@ -80,6 +80,24 @@ public class DescargarHorariosFragment extends Fragment {
 
                                 descargarConDownloadManager();
 
+                                /*binding.buttonFeedback.setVisibility(View.VISIBLE);
+                                binding.autoCompleteTextView.setVisibility(View.VISIBLE);
+                                binding.buttonEnviarFeedback.setVisibility(View.VISIBLE);
+
+                                binding.buttonFeedback.setOnClickListener(v1 -> {
+
+                                    String feedback = binding.autoCompleteTextView.getText().toString();
+
+                                    binding.buttonEnviarFeedback.setOnClickListener(v2 -> {
+                                            if (!feedback.isEmpty()){
+                                                trabajadorService.enviarFeedback(idTrabajador, feedback);
+                                                Toast.makeText(getContext(), "feedback Enviado correctamente", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                    });
+
+                                });*/
+
                                 //se lanza el launcher con el metodo para descargar
                                 /*launcher = registerForActivityResult(
                                         new ActivityResultContracts.RequestPermission(),
