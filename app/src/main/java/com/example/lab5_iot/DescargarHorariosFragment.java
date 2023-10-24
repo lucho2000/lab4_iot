@@ -47,7 +47,7 @@ public class DescargarHorariosFragment extends Fragment {
 
     String idTrabajador;
 
-    String canal2 = "NotificationTrabajador";
+    String idcanal2 = "channelHighPriorityTrabajador";
 
     ActivityResultLauncher<String> launcher;
 
@@ -182,18 +182,18 @@ public class DescargarHorariosFragment extends Fragment {
 
 
     public void lanzarNotificacion(){
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), canal2)
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), idcanal2)
                 .setSmallIcon(R.drawable.baseline_groups_24)
                 .setContentTitle("Tutorias - descargar horarios")
                 .setContentText("No cuenta con tutorias pendientes")
                 .setPriority(NotificationCompat.DEFAULT_ALL) //alta prioridad
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
-        if (ActivityCompat.checkSelfPermission(getActivity(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
-            notificationManagerCompat.notify(1, builder.build());
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        if (ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            notificationManagerCompat.notify(2, builder.build());
         }
     }
 
