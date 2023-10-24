@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController()
 @RequestMapping("/trabajador")
 public class TrabajadorWebService {

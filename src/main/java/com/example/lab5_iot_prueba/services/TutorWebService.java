@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController()
 @RequestMapping("/tutor")
 public class TutorWebService {
