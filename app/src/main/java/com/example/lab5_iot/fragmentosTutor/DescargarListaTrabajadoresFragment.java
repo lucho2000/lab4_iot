@@ -53,13 +53,11 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TrabajadorService.class);
-
+        codigoTutor = binding.textCodigoTutor.getText().toString();
         binding.buttonDescargarListaTrabajadores.setOnClickListener(view -> {
 
-            codigoTutor = binding.textCodigoTutor.getText().toString();
-            if (!codigoTutor.isEmpty()) {
 
-                int idTutor = Integer.parseInt(codigoTutor);
+            if (!codigoTutor.isEmpty()) {
 
                 trabajadorService.buscarTodosTrabajadores(codigoTutor).enqueue(new Callback<ListaTrabajadoresDto>() {
                     @Override

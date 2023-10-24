@@ -14,6 +14,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -63,29 +64,24 @@ public class DescargarHorariosFragment extends Fragment {
                 .build()
                 .create(TrabajadorService.class);
 
-        idTrabajador = binding.idTrabajador.getText().toString();
+        binding.buttonDescargar.setOnClickListener(v -> {
 
+            idTrabajador = binding.idTrabajador.getText().toString();
+            if (!idTrabajador.isEmpty()){
+                trabajadorService.buscarTrabajadorPorId(idTrabajador).enqueue(new Callback<TrabajadorDto>() {
+                    @Override
+                    public void onResponse(Call<TrabajadorDto> call, Response<TrabajadorDto> response) {
+                        TrabajadorDto tDto = response.body();
 
-        //validando si el campo esta vacio
-        if (!idTrabajador.isEmpty()){
-
-
-            trabajadorService.buscarTrabajadorPorId(idTrabajador).enqueue(new Callback<TrabajadorDto>() {
-                @Override
-                public void onResponse(Call<TrabajadorDto> call, Response<TrabajadorDto> response) {
-                    TrabajadorDto tDto = response.body();
-
-                    if (response.isSuccessful()){
-
-                        //si el id ingresado esta en la base de datos
-
-                        if (idTrabajador == tDto.getEmployee().getEmployeeId().toString()){
+                        if (response.isSuccessful()){
 
                             //si tiene meetingId
                             if (tDto.getEmployee().getMeeting() ){
 
+                                descargarConDownloadManager();
+
                                 //se lanza el launcher con el metodo para descargar
-                                launcher = registerForActivityResult(
+                                /*launcher = registerForActivityResult(
                                         new ActivityResultContracts.RequestPermission(),
                                         isGranted -> {
 
@@ -94,41 +90,57 @@ public class DescargarHorariosFragment extends Fragment {
                                             } else {
                                                 Log.e("msg-test", "Permiso denegado");
                                             }
-                                        });
+                                        });*/
 
                             } else{
                                 Toast.makeText(getActivity(), "No cuenta con tutorias pendientes", Toast.LENGTH_SHORT).show();
                                 lanzarNotificacion();
                             }
-
-                        } else {
-                            Toast.makeText(getActivity(), "Ingrese un ID valido de trabajador", Toast.LENGTH_SHORT).show();
                         }
                     }
 
-                }
+                    @Override
+                    public void onFailure(Call<TrabajadorDto> call, Throwable t) {
+                        Log.d("msg-test","Algo paso");
+                        Log.d("msg-test",t.getMessage());
+                    }
+                });
 
-                @Override
-                public void onFailure(Call<TrabajadorDto> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
+            } else {
+                Toast.makeText(getActivity(), "Ingrese el ID del trabajador", Toast.LENGTH_SHORT).show();
+                Log.d("msg-test","Algo paso codigo");
+                Log.d("msg-test", idTrabajador);
+            }
+        });
 
-        } else {
-            Toast.makeText(getActivity(), "Ingrese el ID del trabajador", Toast.LENGTH_SHORT).show();
-        }
+        //validando si el campo esta vacio
+
 
 
         return binding.getRoot();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        launcher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
 
+                    if (isGranted) { // permiso concedido
+                        descargarConDownloadManager();
+                    } else {
+                        Log.e("msg-test", "Permiso denegado");
+                    }
+                });
+
+    }
 
     public void descargarConDownloadManager() {
 
 
         if (Build.VERSION.SDK_INT >= 29 ||
-                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             //si tengo permisos
             String fileName = "horarios.jpg";
             String endPoint = "https://i.pinimg.com/564x/4e/8e/a5/4e8ea537c896aa277e6449bdca6c45da.jpg";
@@ -142,7 +154,7 @@ public class DescargarHorariosFragment extends Fragment {
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, File.separator + fileName);
 
-            DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager dm = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
             dm.enqueue(request);
         } else {
             //si no tiene permisos
