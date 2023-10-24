@@ -1,10 +1,18 @@
 package com.example.lab5_iot.fragmentosTutor;
 
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +26,7 @@ import com.example.lab5_iot.dtos.ListaTrabajadoresDto;
 import com.example.lab5_iot.entity.Employee;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,8 +47,12 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
 
     String codigoTutor;
 
+    String fileNameJson = "listaTrabajadores.txt";
+
 
     ListaTrabajadoresDto dto;
+
+    ActivityResultLauncher<String> launcher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,9 +66,9 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TrabajadorService.class);
-        codigoTutor = binding.textCodigoTutor.getText().toString();
-        binding.buttonDescargarListaTrabajadores.setOnClickListener(view -> {
 
+        binding.buttonDescargarListaTrabajadores.setOnClickListener(view -> {
+            codigoTutor = binding.textCodigoTutor.getText().toString();
 
             if (!codigoTutor.isEmpty()) {
 
@@ -67,6 +80,7 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
                             ListaTrabajadoresDto listaTrabajadoresDto = response.body();
 
                             guardarArchivoComoJson2(listaTrabajadoresDto.getEmployees());
+                            //descargarListaConDownloadManager(fileNameJson);
 
                             Toast.makeText(getContext(), "Se descargó correctamente la lista de trabajadores", Toast.LENGTH_SHORT).show();
                         }
@@ -98,7 +112,7 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
         String listaEmployeeJson = gson.toJson(listaEmployeesPorManager);
 
         //nombre del archivo a guardar
-        String fileNameJson = "listaTrabajadores.txt";
+        //fileNameJson = "listaTrabajadores.txt";
 
         //Se utiliza la clase FileOutputStream para poder almacenar en Android
         try (FileOutputStream fileOutputStream = this.getActivity().openFileOutput(fileNameJson, Context.MODE_PRIVATE);
@@ -108,6 +122,39 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
             Log.d("msg-test", listaEmployeesPorManager.get(0).getFirstName());
         } catch (IOException e) {
             Log.d("msg-test", e.toString() );
+        }
+    }
+
+    public void descargarListaConDownloadManager(String fileName) {
+
+
+        if (Build.VERSION.SDK_INT >= 29 ||
+                ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            //si tengo permisos
+
+            File archivoLocal = new File(getContext().getFilesDir(), "listaTrabajadores.txt");
+
+            String ruta = getContext().getFilesDir() + "data/com.example.lab5_iot/files/listaTrabajadores.txt";
+
+            Uri uri  = Uri.parse(ruta);
+            //Uri archivoUri = FileProvider.getUriForFile(getContext(), "com.example.lab5_iot", archivoLocal);
+            //String endPoint =  getContext().getFilesDir().getPath() + "/data/com.example.lab5_iot/files/" + fileName;
+
+            //Uri downloadUri = Uri.parse(archivoUri);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+            request.setAllowedOverRoaming(false);
+            request.setTitle(fileName);
+            request.setMimeType("text/plain");
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+            //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, File.separator + fileName);
+
+            DownloadManager dm = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            dm.enqueue(request);
+        } else {
+            //si no tiene permisos
+            launcher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 
