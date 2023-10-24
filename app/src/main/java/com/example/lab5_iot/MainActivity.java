@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        crearChannelNotificationTutor();
-        crearChannelNotificationTrabajador();
-
     }
 
     public void crearChannelNotificationTutor(){
@@ -39,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(notificationChannel);
 
             askPermission(); //preguntando permisos
-
 
         }
     }

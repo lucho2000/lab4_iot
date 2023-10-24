@@ -15,7 +15,7 @@ public class Employee {
     private Float commissionPct;
     private Integer managerId;
     private Department departmentId;
-    private Integer meeting;
+    private Boolean meeting;
     private String meetingDate;
 
     private String employeeFeedback;
@@ -108,11 +108,11 @@ public class Employee {
         this.departmentId = departmentId;
     }
 
-    public Integer getMeeting() {
+    public Boolean getMeeting() {
         return meeting;
     }
 
-    public void setMeeting(Integer meeting) {
+    public void setMeeting(Boolean meeting) {
         this.meeting = meeting;
     }
 

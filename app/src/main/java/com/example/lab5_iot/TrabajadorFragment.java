@@ -62,9 +62,7 @@ public class TrabajadorFragment extends Fragment {
                 .build()
                 .create(TrabajadorService.class);
 
-        //trabajadorService.
 
-        //lanzarNotificacion2(dto.getEmployee().getMeetingDate());
         return binding.getRoot();
     }
 

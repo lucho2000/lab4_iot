@@ -17,7 +17,7 @@ public interface TrabajadorService {
     @GET("/tutor/trabajadores/{trabajador_id}")
     Call<TrabajadorDto> buscarTrabajadorPorId(@Path("trabajador_id") String idTrabajador);  // ruta web service: tutor/trabajadores/{trabajador_id}
 
-    @GET("tutor/{tutor_id}/trabajadores")
+    @GET("/tutor/{tutor_id}/trabajadores")
     Call<ListaTrabajadoresDto> buscarTodosTrabajadores(@Path("tutor_id") String idTutor);  // tutor/{tutor_id}/trabajadores
 
 

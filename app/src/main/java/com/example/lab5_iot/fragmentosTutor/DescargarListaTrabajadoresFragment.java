@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +37,9 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
     FragmentDescargarListaTrabajadoresBinding binding;
 
     String codigoTutor;
-    TrabajadorService trabajadorService = new Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080")   //ip emulador
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(TrabajadorService.class);
 
+
+    ListaTrabajadoresDto dto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,11 +48,15 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentDescargarListaTrabajadoresBinding.inflate(inflater, container, false);
 
-        codigoTutor = binding.textCodigoTutor.getText().toString();
-
+        TrabajadorService trabajadorService = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.26:8080")   //ip emulador
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(TrabajadorService.class);
 
         binding.buttonDescargarListaTrabajadores.setOnClickListener(view -> {
 
+            codigoTutor = binding.textCodigoTutor.getText().toString();
             if (!codigoTutor.isEmpty()) {
 
                 int idTutor = Integer.parseInt(codigoTutor);
@@ -65,8 +67,9 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
 
                         if (response.isSuccessful()){
                             ListaTrabajadoresDto listaTrabajadoresDto = response.body();
-                            HashMap<String, HashMap<String, Object>> datos = obtenerDatos(listaTrabajadoresDto.getListaEmpleado());
-                            guardarArchivoComoJson2(datos);
+                            //HashMap<String, HashMap<String, Object>> datos = obtenerDatos(listaTrabajadoresDto.getEmployees());
+
+                            guardarArchivoComoJson2(listaTrabajadoresDto.getEmployees());
 
                             Toast.makeText(getContext(), "Se descargó correctamente la lista de trabajadores", Toast.LENGTH_SHORT).show();
                         }
@@ -75,9 +78,13 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<ListaTrabajadoresDto> call, Throwable t) {
-                        t.printStackTrace();
+                        Log.d("msg-test","Algo paso");
+                        Log.d("msg-test",t.getMessage());
                     }
                 });
+            } else {
+                //Log.d("msg-test","Algo paso codigo");
+                //Log.d("msg-test", codigoTutor);
             }
         });
 
@@ -91,7 +98,7 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
         for (int i = 0; i < employees.size(); i++) {
             HashMap<String, Object> data = new HashMap<>();
 
-            data.put("employeeId", employees.get(i).getEmployeeId().toString());
+            data.put("employeeId", employees.get(i).getEmployeeId());
             String firstName = employees.get(i).getFirstName();
 
             if (firstName != null || !firstName.equals(""))
@@ -147,7 +154,7 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
         return diccionario;
     }
 
-    public void guardarArchivoComoJson2(HashMap<String, HashMap<String, Object>> listaEmployeesPorManager) {
+    public void guardarArchivoComoJson2(List<Employee> listaEmployeesPorManager) {
         //convertimos el arreglo a un String (para guardarlo como json)
 
         //String idTrabajadorStr = (String) listaEmployee.get("id");
@@ -161,8 +168,10 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
         try (FileOutputStream fileOutputStream = this.getActivity().openFileOutput(fileNameJson, Context.MODE_PRIVATE);
              FileWriter fileWriter = new FileWriter(fileOutputStream.getFD())) {
             fileWriter.write(listaEmployeeJson);
+            Log.d("msg-test","algo paso descargar");
+            Log.d("msg-test", listaEmployeesPorManager.get(0).getFirstName());
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d("msg-test", e.toString() );
         }
     }
 

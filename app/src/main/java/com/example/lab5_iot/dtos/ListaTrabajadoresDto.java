@@ -6,23 +6,23 @@ import java.util.List;
 
 public class ListaTrabajadoresDto {
 
-    private List<Employee> listaEmpleado;
+    private List<Employee> employees;
 
-    private String respuesta;
+    private String result;
 
-    public List<Employee> getListaEmpleado() {
-        return listaEmpleado;
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setListaEmpleado(List<Employee> listaEmpleado) {
-        this.listaEmpleado = listaEmpleado;
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 
-    public String getRespuesta() {
-        return respuesta;
+    public String getResult() {
+        return result;
     }
 
-    public void setRespuesta(String respuesta) {
-        this.respuesta = respuesta;
+    public void setResult(String result) {
+        this.result = result;
     }
 }

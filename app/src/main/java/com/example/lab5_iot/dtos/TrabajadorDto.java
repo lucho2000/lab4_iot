@@ -5,7 +5,7 @@ import com.example.lab5_iot.entity.Employee;
 public class TrabajadorDto {
 
     private Employee employee;
-    private String respuesta;
+    private String result;
 
     public Employee getEmployee() {
         return employee;
@@ -15,11 +15,11 @@ public class TrabajadorDto {
         this.employee = employee;
     }
 
-    public String getRespuesta() {
-        return respuesta;
+    public String getResult() {
+        return result;
     }
 
-    public void setRespuesta(String respuesta) {
-        this.respuesta = respuesta;
+    public void setResult(String result) {
+        this.result = result;
     }
 }

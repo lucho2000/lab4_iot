@@ -58,7 +58,7 @@ public class DescargarHorariosFragment extends Fragment {
         binding = FragmentDescargarHorariosBinding.inflate(inflater, container, false);
 
         TrabajadorService trabajadorService = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080")   //ip emulador
+                .baseUrl("http://192.168.1.26:8080")   //ip emulador
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TrabajadorService.class);
@@ -82,8 +82,7 @@ public class DescargarHorariosFragment extends Fragment {
                         if (idTrabajador == tDto.getEmployee().getEmployeeId().toString()){
 
                             //si tiene meetingId
-                            if (tDto.getEmployee().getMeeting() ==1){
-                                tDto.setRespuesta("tiene tutoria");
+                            if (tDto.getEmployee().getMeeting() ){
 
                                 //se lanza el launcher con el metodo para descargar
                                 launcher = registerForActivityResult(

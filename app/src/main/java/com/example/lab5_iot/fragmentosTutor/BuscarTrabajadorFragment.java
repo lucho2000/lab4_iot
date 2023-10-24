@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,23 +38,20 @@ public class BuscarTrabajadorFragment extends Fragment {
 
     String idTrabajador;
 
-    TrabajadorService trabajadorService = new Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080")   //ip emulador
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(TrabajadorService.class);
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentBuscarTrabajadorBinding.inflate(inflater, container, false);
-
-
-        idTrabajador = binding.textCodigoTrabajador.getText().toString();
-
+        TrabajadorService trabajadorService = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.26:8080")   //ip emulador
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(TrabajadorService.class);
         binding.buttonDescargarInfoTrabajador.setOnClickListener(view -> {
-
+            idTrabajador = binding.textCodigoTrabajador.getText().toString();
             if (!idTrabajador.isEmpty()){
                 //int id = Integer.parseInt(idTrabajador);
                 trabajadorService.buscarTrabajadorPorId(idTrabajador).enqueue(new Callback<TrabajadorDto>() {
@@ -63,8 +61,7 @@ public class BuscarTrabajadorFragment extends Fragment {
 
                             TrabajadorDto trabajadorDto = response.body();
                             HashMap<String, Object> dataHM =  mostrarDataWebService(trabajadorDto.getEmployee());
-                            guardarArchivoComoJson(dataHM);
-
+                            guardarArchivoComoJson(trabajadorDto.getEmployee());
 
                             Toast.makeText(getContext(), "Se descargó correctamente la informacion del trabajador", Toast.LENGTH_SHORT).show();
 
@@ -73,7 +70,8 @@ public class BuscarTrabajadorFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<TrabajadorDto> call, Throwable t) {
-                        t.printStackTrace();
+                        Log.d("msg-test","Algo paso");
+                        Log.d("msg-test",t.getMessage());
                     }
                 });
 
@@ -81,6 +79,8 @@ public class BuscarTrabajadorFragment extends Fragment {
             } else {
 
                 Toast.makeText(getContext(), "Por favor ingrese un ID ", Toast.LENGTH_SHORT).show();
+                Log.d("msg-test","Algo paso codigo");
+                Log.d("msg-test", idTrabajador);
             }
         });
 
@@ -162,15 +162,14 @@ public class BuscarTrabajadorFragment extends Fragment {
     }
 
 
-    public void guardarArchivoComoJson(HashMap<String, Object> employee) {
+    public void guardarArchivoComoJson(Employee employee) {
         //convertimos el arreglo a un String (para guardarlo como json)
 
-        String idTrabajadorStr = (String) employee.get("id");
         Gson gson = new Gson();
         String listaEmployeeJson = gson.toJson(employee);
 
         //nombre del archivo a guardar
-        String fileNameJson = "informacionDe" +idTrabajadorStr + ".txt";
+        String fileNameJson = "informacionDe" +employee.getEmployeeId().toString() + ".txt";
 
         //Se utiliza la clase FileOutputStream para poder almacenar en Android
         try (FileOutputStream fileOutputStream = this.getActivity().openFileOutput(fileNameJson, Context.MODE_PRIVATE);
