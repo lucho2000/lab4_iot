@@ -3,7 +3,10 @@ package com.example.lab5_iot;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 
+import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +51,7 @@ public class DescargarHorariosFragment extends Fragment {
     String idTrabajador;
 
     String idcanal2 = "channelHighPriorityTrabajador";
+    String mensaje = "Canal para notificaciones High Priority";
 
     ActivityResultLauncher<String> launcher;
 
@@ -112,7 +116,8 @@ public class DescargarHorariosFragment extends Fragment {
 
                             } else{
                                 Toast.makeText(getActivity(), "No cuenta con tutorias pendientes", Toast.LENGTH_SHORT).show();
-                                lanzarNotificacion();
+                                crearChannelNotificationTrabajador();
+                                lanzarNotificacionValidarTutorias();
                             }
                         }
                     }
@@ -181,7 +186,33 @@ public class DescargarHorariosFragment extends Fragment {
     }
 
 
-    public void lanzarNotificacion(){
+    public void crearChannelNotificationTrabajador(){
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+
+            NotificationChannel notificationChannel = new NotificationChannel(idcanal2,  mensaje, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription("HIGH PRIORITY");
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            askPermission(); //preguntando permisos
+
+        }
+    }
+
+
+    public void askPermission(){
+        //android.os.Build.VERSION_CODES.TIRAMISU == 33
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) ==
+                        PackageManager.PERMISSION_DENIED) {
+
+            ActivityCompat.requestPermissions((Activity) getContext(),
+                    new String[]{POST_NOTIFICATIONS},
+                    101);
+        }
+    }
+
+    public void lanzarNotificacionValidarTutorias(){
         Intent intent = new Intent(getContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), idcanal2)
