@@ -64,24 +64,10 @@ public class TrabajadorFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lanzarNotificacion();
+
     }
 
-    public void lanzarNotificacion(){
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), canal2)
-                .setSmallIcon(R.drawable.baseline_groups_24)
-                .setContentTitle("Trabajador")
-                .setContentText("Está entrando en modo Trabajador")
-                .setPriority(NotificationCompat.PRIORITY_HIGH) //alta prioridad
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
-        if (ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
-            notificationManagerCompat.notify(1, builder.build());
-        }
-    }
+
 
     public void lanzarNotificacion2(String fechaHora)  {
 

@@ -6,11 +6,16 @@ import static android.Manifest.permission.POST_NOTIFICATIONS;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -23,7 +28,7 @@ import com.example.lab5_iot.databinding.FragmentDescargarListaTrabajadoresBindin
 import com.example.lab5_iot.databinding.FragmentPrincipalBinding;
 
 
-public class PrincipalFragment extends Fragment {
+public class PrincipalFragment extends Fragment{
 
     FragmentPrincipalBinding binding;
 
@@ -40,55 +45,30 @@ public class PrincipalFragment extends Fragment {
         binding = FragmentPrincipalBinding.inflate(inflater, container, false);
 
 
-        //crearChannelNotificationTrabajador();
-
         NavController navController = NavHostFragment.findNavController(PrincipalFragment.this);
 
         binding.buttonIrATutor.setOnClickListener(view -> {
             navController.navigate(R.id.action_principalFragment_to_tutorFragment);//hacia la vista del tutor
 
+            crearChannelNotificationTutor();
+            lanzarNotificacionTutor();
+
         });
 
         binding.buttonIrATrabajador.setOnClickListener(view -> {
             navController.navigate(R.id.action_principalFragment_to_trabajadorFragment); //hacia la vista del trabajador
+
+            crearChannelNotificationTrabajador();
+            lanzarNotificacion2();
         });
 
 
         return binding.getRoot();
 
-
-
     }
 
 
-    /*public void crearChannelNotificationTutor(){
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-
-            NotificationChannel notificationChannel = new NotificationChannel(idcanal1,  mensaje, NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setDescription("HIGH PRIORITY");
-            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(notificationChannel);
-
-            askPermission(); //preguntando permisos
-
-        }
-    }*/
-
-
-    /*public void crearChannelNotificationTrabajador(){
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-
-            NotificationChannel notificationChannel = new NotificationChannel(idcanal2,  mensaje, NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setDescription("HIGH PRIORITY");
-            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(notificationChannel);
-
-            askPermission(); //preguntando permisos
-
-        }
-    }*/
-
-    /*public void askPermission(){
+    public void askPermission(){
         //android.os.Build.VERSION_CODES.TIRAMISU == 33
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) ==
@@ -98,5 +78,68 @@ public class PrincipalFragment extends Fragment {
                     new String[]{POST_NOTIFICATIONS},
                     101);
         }
-    }*/
+    }
+
+
+    public void crearChannelNotificationTutor(){
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+
+            NotificationChannel notificationChannel = new NotificationChannel(idcanal1,  mensaje, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription("HIGH PRIORITY");
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            askPermission(); //preguntando permisos
+
+        }
+    }
+
+
+
+    public void lanzarNotificacionTutor(){
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), idcanal1)
+                .setSmallIcon(R.drawable.baseline_groups_24)
+                .setContentTitle("Tutor")
+                .setContentText("Está entrando en modo Tutor")
+                .setPriority(NotificationCompat.PRIORITY_HIGH) //alta prioridad
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        if (ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            notificationManagerCompat.notify(1, builder.build());
+        }
+    }
+
+    public void crearChannelNotificationTrabajador(){
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+
+            NotificationChannel notificationChannel = new NotificationChannel(idcanal2,  mensaje, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription("HIGH PRIORITY");
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            askPermission(); //preguntando permisos
+
+        }
+    }
+
+
+    public void lanzarNotificacion2(){
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), idcanal2)
+                .setSmallIcon(R.drawable.baseline_groups_24)
+                .setContentTitle("Trabajador")
+                .setContentText("Está entrando en modo Trabajador")
+                .setPriority(NotificationCompat.PRIORITY_HIGH) //alta prioridad
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        if (ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            notificationManagerCompat.notify(2, builder.build());
+        }
+    }
+
 }
