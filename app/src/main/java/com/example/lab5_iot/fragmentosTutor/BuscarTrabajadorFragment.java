@@ -60,7 +60,7 @@ public class BuscarTrabajadorFragment extends Fragment {
                         if (response.isSuccessful()){
 
                             TrabajadorDto trabajadorDto = response.body();
-                            HashMap<String, Object> dataHM =  mostrarDataWebService(trabajadorDto.getEmployee());
+
                             guardarArchivoComoJson(trabajadorDto.getEmployee());
 
                             Toast.makeText(getContext(), "Se descargó correctamente la informacion del trabajador", Toast.LENGTH_SHORT).show();
@@ -85,80 +85,6 @@ public class BuscarTrabajadorFragment extends Fragment {
         });
 
         return binding.getRoot();
-    }
-
-
-    public HashMap<String, Object> mostrarDataWebService(Employee trabajador){
-
-        HashMap<String, Object> data = new HashMap<>();
-
-        data.put("id", trabajador.getEmployeeId().toString());
-
-        String firstName = trabajador.getFirstName();
-        String phoneNumber = trabajador.getPhoneNumber();
-        Department idDepartment = trabajador.getDepartmentId();
-
-        if (firstName.equals("") | firstName == null){
-
-            data.put("Nombre", trabajador.getEmployeeId().toString());
-        } else {
-            data.put("Nombre", "sin nombre");
-        }
-
-        data.put("apellido", trabajador.getLastName());
-
-        data.put("correo", trabajador.getEmail());
-
-        //si tiene numero
-        if (phoneNumber==null){
-            data.put("Numero de telefono", "no tiene");
-        } else {
-            data.put("Numero de telefono", trabajador.getPhoneNumber() );
-        }
-        //job title
-        data.put("job title", trabajador.getJobId().getJobTitle() );
-
-        //salario
-        if (trabajador.getSalary() == null){
-            data.put("Salario", "-");
-        } else {
-            data.put("Salario", trabajador.getSalary().toString() );
-
-        }
-
-        if (idDepartment==null){ //validando si tiene id de departamento = area donde trabaja
-            data.put("department", "no tiene");
-            data.put("pais","no tiene" );
-            data.put("region","no tiene" );
-        } else {
-            data.put("department", trabajador.getDepartmentId().getDepartmentName() );
-
-            //validando si tiene id de location
-            if (trabajador.getDepartmentId().getLocationId()==null){ //validando si tiene o no departamento = area donde trabaja
-                data.put("pais","no tiene");
-                data.put("region","no tiene");
-            } else {
-
-                //validar si tiene id de pais
-                if (trabajador.getDepartmentId().getLocationId().getCountryId()==null){
-                    data.put("pais","no tiene");
-                } else {
-                    data.put("pais", trabajador.getDepartmentId().getLocationId().getCountryId().getCountryName() );
-
-                    //validar si tiene id de region
-                    if (trabajador.getDepartmentId().getLocationId().getCountryId().getRegionsId()==null){
-                        data.put("region","no tiene");
-                    } else{
-                        data.put("pais", trabajador.getDepartmentId().getLocationId().getCountryId().getRegionsId().getRegionName() );
-                    }
-
-                }
-
-            }
-
-        }
-
-        return data;
     }
 
 

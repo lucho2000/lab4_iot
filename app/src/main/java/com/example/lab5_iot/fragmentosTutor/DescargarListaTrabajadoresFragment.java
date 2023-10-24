@@ -67,7 +67,6 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
 
                         if (response.isSuccessful()){
                             ListaTrabajadoresDto listaTrabajadoresDto = response.body();
-                            //HashMap<String, HashMap<String, Object>> datos = obtenerDatos(listaTrabajadoresDto.getEmployees());
 
                             guardarArchivoComoJson2(listaTrabajadoresDto.getEmployees());
 
@@ -92,67 +91,6 @@ public class DescargarListaTrabajadoresFragment extends Fragment {
 
     }
 
-    public HashMap<String, HashMap<String, Object>> obtenerDatos(List<Employee> employees) {
-        HashMap<String, HashMap<String, Object>> diccionario = new HashMap<>();
-
-        for (int i = 0; i < employees.size(); i++) {
-            HashMap<String, Object> data = new HashMap<>();
-
-            data.put("employeeId", employees.get(i).getEmployeeId());
-            String firstName = employees.get(i).getFirstName();
-
-            if (firstName != null || !firstName.equals(""))
-                data.put("firstName", employees.get(i).getEmployeeId().toString());
-            else
-                data.put("firstName", "sin nombre");
-
-            data.put("lastName", employees.get(i).getLastName());
-            data.put("email", employees.get(i).getEmail());
-
-            if (employees.get(i).getPhoneNumber() != null || employees.get(i).getPhoneNumber().equals(""))
-                data.put("phoneNumber", employees.get(i).getPhoneNumber().toString());
-            else
-                data.put("phoneNumber", "no tiene");
-
-            data.put("jobTitle", employees.get(i).getJobId().getJobTitle().toString());
-
-            //salario
-            if (employees.get(i).getSalary()!= null)
-                data.put("salary", String.valueOf(employees.get(i).getSalary()));
-            else
-                data.put("salary", "no tiene");
-
-
-            if (employees.get(i).getDepartmentId() == null) {
-                data.put("departmentName", "no tiene");
-                data.put("countryName", "no tiene");
-                data.put("region", "no tiene");
-            } else {
-                data.put("departmentName", employees.get(i).getDepartmentId().getDepartmentName());
-
-                if (employees.get(i).getDepartmentId().getLocationId() == null) {
-                    data.put("countryName", "no tiene");
-                    data.put("regionName", "no tiene");
-                } else {
-
-                    if (employees.get(i).getDepartmentId().getLocationId().getCountryId() == null) {
-                        data.put("countryName", "no tiene");
-                        data.put("regionName", "no tiene");
-                    } else {
-                        data.put("countryName", employees.get(i).getDepartmentId().getLocationId().getCountryId().getCountryName());
-
-                        if (employees.get(i).getDepartmentId().getLocationId().getCountryId().getRegionsId() == null) {
-                            data.put("regionName", "no tiene");
-                        } else {
-                            data.put("regionName", employees.get(i).getDepartmentId().getLocationId().getCountryId().getRegionsId().getRegionName());
-                        }
-                    }
-                }
-            }
-            diccionario.put("employee" + String.valueOf(i), data);
-        }
-        return diccionario;
-    }
 
     public void guardarArchivoComoJson2(List<Employee> listaEmployeesPorManager) {
         //convertimos el arreglo a un String (para guardarlo como json)
