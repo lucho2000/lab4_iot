@@ -46,7 +46,7 @@ public class BuscarTrabajadorFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentBuscarTrabajadorBinding.inflate(inflater, container, false);
         TrabajadorService trabajadorService = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.26:8080")   //ip emulador
+                .baseUrl("http://10.0.2.2:8080")   //ip emulador
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TrabajadorService.class);
